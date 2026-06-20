@@ -10,20 +10,12 @@ function subscribe() {
   return () => {};
 }
 
-function getClientSnapshot() {
-  return true;
-}
-
-function getServerSnapshot() {
-  return false;
-}
-
 export function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme();
   const mounted = useSyncExternalStore(
     subscribe,
-    getClientSnapshot,
-    getServerSnapshot,
+    () => true,
+    () => false,
   );
 
   if (!mounted) {
@@ -31,7 +23,7 @@ export function ThemeToggle() {
       <Button
         variant="ghost"
         size="icon"
-        className="size-9 rounded-full"
+        className="size-9 rounded-lg text-white/60"
         aria-label="Toggle theme"
         disabled
       >
@@ -46,7 +38,7 @@ export function ThemeToggle() {
     <Button
       variant="ghost"
       size="icon"
-      className="size-9 rounded-full"
+      className="size-9 rounded-lg text-white/60 hover:bg-white/10 hover:text-white"
       onClick={() => setTheme(isDark ? "light" : "dark")}
       aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
     >

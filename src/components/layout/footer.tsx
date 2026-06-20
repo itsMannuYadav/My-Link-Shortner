@@ -1,63 +1,70 @@
 import Link from "next/link";
-import { Link2 } from "lucide-react";
 
 import { appConfig } from "@/lib/config";
-import { Separator } from "@/components/ui/separator";
 
 export function Footer() {
   const year = new Date().getFullYear();
+  const host = new URL(appConfig.url).host;
 
   return (
-    <footer className="mt-auto border-t border-border/60 bg-muted/30">
-      <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
-        <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
-          <div className="max-w-sm space-y-3">
-            <div className="flex items-center gap-2.5">
-              <span className="flex size-8 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-500 to-violet-600 text-white">
-                <Link2 className="size-3.5" aria-hidden="true" />
+    <footer className="border-t border-border/60 bg-[#09090b] text-white">
+      <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6 lg:px-8">
+        <div className="grid gap-10 md:grid-cols-[1.5fr_1fr_1fr]">
+          <div className="space-y-4">
+            <div className="flex items-center gap-3">
+              <span className="flex size-9 items-center justify-center rounded-xl border border-brand/30 bg-[#141416] font-heading text-sm font-bold text-brand">
+                ML
               </span>
-              <span className="font-semibold">{appConfig.fullName}</span>
+              <div>
+                <p className="font-heading font-semibold">{appConfig.fullName}</p>
+                <p className="text-xs text-white/40">Link Studio</p>
+              </div>
             </div>
-            <p className="text-sm leading-relaxed text-muted-foreground">
+            <p className="max-w-xs text-sm leading-relaxed text-white/50">
               {appConfig.tagline}
             </p>
+            <p className="font-mono text-xs text-brand">{host}</p>
           </div>
 
-          <div className="grid grid-cols-2 gap-8 sm:grid-cols-3">
-            <div>
-              <h3 className="mb-3 text-sm font-medium">Product</h3>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li>
-                  <Link href="#features" className="transition-colors hover:text-foreground">
-                    Features
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#shortener" className="transition-colors hover:text-foreground">
-                    Shorten Link
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="mb-3 text-sm font-medium">Legal</h3>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li>
-                  <span>Privacy friendly</span>
-                </li>
-                <li>
-                  <span>No tracking</span>
-                </li>
-              </ul>
-            </div>
+          <div>
+            <h3 className="mb-4 font-mono text-[10px] uppercase tracking-[0.2em] text-white/40">
+              Navigate
+            </h3>
+            <ul className="space-y-2.5 text-sm text-white/60">
+              <li>
+                <Link href="#shortener" className="transition-colors hover:text-brand">
+                  Shorten a link
+                </Link>
+              </li>
+              <li>
+                <Link href="#how-it-works" className="transition-colors hover:text-brand">
+                  How it works
+                </Link>
+              </li>
+              <li>
+                <Link href="#features" className="transition-colors hover:text-brand">
+                  Features
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="mb-4 font-mono text-[10px] uppercase tracking-[0.2em] text-white/40">
+              Built with
+            </h3>
+            <ul className="space-y-2.5 text-sm text-white/60">
+              <li>Next.js 16 · TypeScript</li>
+              <li>Prisma · Turso</li>
+              <li>Deployed on Vercel</li>
+            </ul>
           </div>
         </div>
 
-        <Separator className="my-8" />
-
-        <p className="text-center text-sm text-muted-foreground">
-          © {year} {appConfig.fullName}. Built for speed, designed for sharing.
-        </p>
+        <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-white/10 pt-8 text-xs text-white/35 sm:flex-row">
+          <p>© {year} {appConfig.fullName}</p>
+          <p>Built for speed. Designed for sharing.</p>
+        </div>
       </div>
     </footer>
   );

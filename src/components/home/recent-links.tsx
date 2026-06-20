@@ -7,13 +7,6 @@ import { QrCodeDialog } from "@/components/shared/qr-code-dialog";
 import type { RecentLink } from "@/features/links/types";
 import { truncateUrl } from "@/utils/url";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 
 interface RecentLinksProps {
   links: RecentLink[];
@@ -42,11 +35,7 @@ function formatRelativeTime(isoDate: string): string {
 }
 
 export function RecentLinks({ links, isHydrated, onClear }: RecentLinksProps) {
-  if (!isHydrated) {
-    return null;
-  }
-
-  if (links.length === 0) {
+  if (!isHydrated || links.length === 0) {
     return null;
   }
 
@@ -56,19 +45,19 @@ export function RecentLinks({ links, isHydrated, onClear }: RecentLinksProps) {
         <div>
           <h2
             id="recent-links-heading"
-            className="text-xl font-semibold tracking-tight"
+            className="font-heading text-lg font-semibold tracking-tight"
           >
-            Recent Links
+            Recent links
           </h2>
           <p className="text-sm text-muted-foreground">
-            Your last 10 links, saved locally in this browser.
+            Saved in this browser · last 10
           </p>
         </div>
         <Button
           type="button"
           variant="ghost"
           size="sm"
-          className="rounded-full text-muted-foreground"
+          className="rounded-lg text-muted-foreground"
           onClick={onClear}
         >
           <Trash2 className="size-3.5" />
@@ -76,49 +65,40 @@ export function RecentLinks({ links, isHydrated, onClear }: RecentLinksProps) {
         </Button>
       </div>
 
-      <div className="space-y-3">
+      <div className="divide-y divide-border/60 overflow-hidden rounded-2xl border border-border/70 bg-card">
         {links.map((link) => (
-          <Card
+          <article
             key={link.shortCode}
-            className="border-border/60 transition-colors hover:border-indigo-500/20"
+            className="flex items-start justify-between gap-3 p-4 transition-colors hover:bg-muted/30"
           >
-            <CardHeader className="pb-2">
-              <div className="flex items-start justify-between gap-3">
-                <div className="min-w-0 flex-1 space-y-1">
-                  <CardTitle className="flex items-center gap-2 text-base">
-                    <Link2
-                      className="size-4 shrink-0 text-indigo-500"
-                      aria-hidden="true"
-                    />
-                    <a
-                      href={link.shortUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="truncate font-mono text-sm hover:text-indigo-600 dark:hover:text-indigo-400"
-                    >
-                      {link.shortUrl}
-                    </a>
-                  </CardTitle>
-                  <CardDescription className="truncate">
-                    {truncateUrl(link.originalUrl, 64)}
-                  </CardDescription>
-                </div>
-                <div className="flex shrink-0 items-center gap-1.5">
-                  <CopyButton value={link.shortUrl} size="icon" />
-                  <QrCodeDialog
-                    url={link.shortUrl}
-                    triggerClassName="rounded-full"
-                  />
-                </div>
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center gap-2">
+                <Link2 className="size-3.5 shrink-0 text-brand" aria-hidden="true" />
+                <a
+                  href={link.shortUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="truncate font-mono text-sm text-brand hover:underline"
+                >
+                  {link.shortUrl}
+                </a>
               </div>
-            </CardHeader>
-            <CardContent className="pt-0">
-              <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
+              <p className="mt-1 truncate pl-5 text-xs text-muted-foreground">
+                {truncateUrl(link.originalUrl, 56)}
+              </p>
+              <p className="mt-1.5 flex items-center gap-1 pl-5 text-[10px] uppercase tracking-wider text-muted-foreground">
                 <Clock className="size-3" aria-hidden="true" />
                 {formatRelativeTime(link.createdAt)}
               </p>
-            </CardContent>
-          </Card>
+            </div>
+            <div className="flex shrink-0 items-center gap-1">
+              <CopyButton value={link.shortUrl} size="icon" />
+              <QrCodeDialog
+                url={link.shortUrl}
+                triggerClassName="rounded-lg border-border/70"
+              />
+            </div>
+          </article>
         ))}
       </div>
     </section>

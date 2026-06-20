@@ -37,7 +37,7 @@ export function QrCodeDialog({
       width: 280,
       margin: 2,
       color: {
-        dark: "#1e1b4b",
+        dark: "#141414",
         light: "#ffffff",
       },
     })

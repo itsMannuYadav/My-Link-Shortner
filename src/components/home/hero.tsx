@@ -1,64 +1,129 @@
 "use client";
 
-import { ArrowDown, Sparkles, Zap } from "lucide-react";
+import Image from "next/image";
+import { ArrowRight, Zap } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
+import { appConfig } from "@/lib/config";
+
+const stats = [
+  { value: "<50ms", label: "Redirect speed" },
+  { value: "6-char", label: "Unique codes" },
+  { value: "Free", label: "No account needed" },
+];
+
+const marqueeLinks = [
+  "go.mannuyadav.me/portfolio",
+  "go.mannuyadav.me/resume",
+  "go.mannuyadav.me/launch",
+  "go.mannuyadav.me/event",
+  "go.mannuyadav.me/shop",
+  "go.mannuyadav.me/blog",
+];
 
 export function Hero() {
   const scrollToShortener = () => {
     document.getElementById("shortener")?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const scrollToFeatures = () => {
-    document.getElementById("features")?.scrollIntoView({ behavior: "smooth" });
-  };
-
   return (
-    <section className="relative overflow-hidden px-4 pb-16 pt-12 sm:px-6 sm:pb-20 sm:pt-16 lg:px-8">
+    <section className="relative overflow-hidden bg-[#09090b] text-white grain hero-glow">
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 -z-10"
+        className="pointer-events-none absolute inset-0 opacity-40"
       >
-        <div className="absolute left-1/2 top-0 h-[480px] w-[720px] -translate-x-1/2 rounded-full bg-gradient-to-b from-indigo-500/20 via-violet-500/10 to-transparent blur-3xl dark:from-indigo-500/15 dark:via-violet-500/5" />
-        <div className="absolute -left-24 top-32 size-72 rounded-full bg-indigo-400/10 blur-3xl" />
-        <div className="absolute -right-24 top-20 size-72 rounded-full bg-violet-400/10 blur-3xl" />
+        <Image
+          src="/images/hero-bg-texture.png"
+          alt=""
+          fill
+          className="object-cover"
+          priority
+        />
       </div>
 
-      <div className="mx-auto max-w-4xl text-center">
-        <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-indigo-500/20 bg-indigo-500/5 px-4 py-1.5 text-sm text-indigo-700 dark:text-indigo-300">
-          <Sparkles className="size-3.5" aria-hidden="true" />
-          Free forever · No sign-up required
+      <div className="relative z-10 mx-auto max-w-6xl px-4 pb-8 pt-10 sm:px-6 sm:pb-12 sm:pt-14 lg:px-8">
+        <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-8">
+          <div className="max-w-xl">
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-brand/25 bg-brand/10 px-3 py-1 text-xs font-medium uppercase tracking-wider text-brand">
+              <span className="size-1.5 rounded-full bg-brand animate-pulse" />
+              Live at {new URL(appConfig.url).host}
+            </div>
+
+            <h1 className="text-balance text-4xl font-bold leading-[1.05] tracking-tight sm:text-5xl lg:text-[3.4rem]">
+              Your links,
+              <br />
+              <span className="text-brand">shorter &amp; sharper.</span>
+            </h1>
+
+            <p className="mt-6 max-w-md text-lg leading-relaxed text-white/60">
+              Paste a long URL. Get a clean short link, QR code, and custom alias
+              — ready to share in seconds. No signup. No clutter.
+            </p>
+
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+              <button
+                type="button"
+                onClick={scrollToShortener}
+                className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-brand px-6 text-sm font-semibold text-brand-foreground transition-all hover:brightness-110 hover:shadow-[0_0_32px_oklch(0.88_0.19_125_/_0.4)]"
+              >
+                <Zap className="size-4" aria-hidden="true" />
+                Shorten a link now
+              </button>
+              <a
+                href="#how-it-works"
+                className="inline-flex h-12 items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-6 text-sm font-medium text-white/80 transition-colors hover:bg-white/10 hover:text-white"
+              >
+                See how it works
+                <ArrowRight className="size-4" aria-hidden="true" />
+              </a>
+            </div>
+
+            <dl className="mt-10 grid grid-cols-3 gap-4 border-t border-white/10 pt-8">
+              {stats.map((stat) => (
+                <div key={stat.label}>
+                  <dt className="font-heading text-xl font-bold text-white sm:text-2xl">
+                    {stat.value}
+                  </dt>
+                  <dd className="mt-1 text-xs text-white/45">{stat.label}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+
+          <div className="relative mx-auto w-full max-w-lg lg:max-w-none">
+            <div
+              aria-hidden="true"
+              className="absolute -inset-4 rounded-3xl bg-brand/10 blur-3xl"
+            />
+            <div className="float-slow relative overflow-hidden rounded-2xl border border-white/10 bg-[#111113] shadow-2xl shadow-black/50">
+              <Image
+                src="/images/hero-product-mockup.png"
+                alt="My Link app showing URL shortening on desktop and mobile"
+                width={1200}
+                height={900}
+                className="h-auto w-full"
+                priority
+              />
+            </div>
+            <div className="absolute -bottom-4 -left-4 hidden rounded-xl border border-white/10 bg-[#141416]/95 px-4 py-3 shadow-xl backdrop-blur sm:block">
+              <p className="font-mono text-xs text-brand">go.mannuyadav.me/aB3xY2</p>
+              <p className="mt-1 text-[10px] text-white/40">Copied · Ready to share</p>
+            </div>
+          </div>
         </div>
+      </div>
 
-        <h1 className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
-          Shorten Long URLs{" "}
-          <span className="bg-gradient-to-r from-indigo-500 to-violet-600 bg-clip-text text-transparent">
-            Instantly
-          </span>
-        </h1>
-
-        <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground sm:text-xl">
-          Create clean, shareable links in seconds.
-        </p>
-
-        <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
-          <Button
-            size="lg"
-            className="h-11 rounded-full bg-gradient-to-r from-indigo-500 to-violet-600 px-8 text-base text-white shadow-lg shadow-indigo-500/25 hover:from-indigo-600 hover:to-violet-700"
-            onClick={scrollToShortener}
-          >
-            <Zap className="size-4" aria-hidden="true" />
-            Shorten Link
-          </Button>
-          <Button
-            size="lg"
-            variant="outline"
-            className="h-11 rounded-full px-8 text-base"
-            onClick={scrollToFeatures}
-          >
-            Learn More
-            <ArrowDown className="size-4" aria-hidden="true" />
-          </Button>
+      <div className="relative z-10 border-t border-white/5 bg-[#0c0c0e]/80 py-4">
+        <div className="overflow-hidden">
+          <div className="link-marquee flex w-max gap-8 whitespace-nowrap px-4">
+            {[...marqueeLinks, ...marqueeLinks].map((link, index) => (
+              <span
+                key={`${link}-${index}`}
+                className="font-mono text-sm text-white/30"
+              >
+                {link}
+              </span>
+            ))}
+          </div>
         </div>
       </div>
     </section>
