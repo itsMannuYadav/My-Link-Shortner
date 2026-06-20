@@ -9,7 +9,7 @@
     "lint": "eslint",
     "postinstall": "prisma generate",
     "db:push": "prisma db push",
-    "db:push:turso": "prisma db push",
+    "db:push:turso": "node scripts/push-turso-schema.mjs",
     "db:migrate": "prisma migrate dev",
     "db:studio": "prisma studio"
   },
