@@ -7,24 +7,51 @@ import type { RecentLink } from "@/features/links/types";
 
 const STORAGE_KEY = "my-link-recent-links";
 const RECENT_LINKS_EVENT = "my-link-recent-links-updated";
+const EMPTY_LINKS: RecentLink[] = [];
+
+let cachedRaw: string | null | undefined;
+let cachedLinks: RecentLink[] = EMPTY_LINKS;
+
+function invalidateCache() {
+  cachedRaw = undefined;
+}
 
 function readStoredLinks(): RecentLink[] {
-  if (typeof window === "undefined") return [];
+  if (typeof window === "undefined") return EMPTY_LINKS;
 
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
-    if (!raw) return [];
+
+    if (raw === cachedRaw) {
+      return cachedLinks;
+    }
+
+    cachedRaw = raw;
+
+    if (!raw) {
+      cachedLinks = EMPTY_LINKS;
+      return cachedLinks;
+    }
+
     const parsed = JSON.parse(raw) as RecentLink[];
-    return Array.isArray(parsed) ? parsed : [];
+    cachedLinks = Array.isArray(parsed) ? parsed : EMPTY_LINKS;
+    return cachedLinks;
   } catch {
-    return [];
+    cachedRaw = null;
+    cachedLinks = EMPTY_LINKS;
+    return cachedLinks;
   }
 }
 
 function subscribe(onStoreChange: () => void) {
-  const handler = () => onStoreChange();
+  const handler = () => {
+    invalidateCache();
+    onStoreChange();
+  };
+
   window.addEventListener("storage", handler);
   window.addEventListener(RECENT_LINKS_EVENT, handler);
+
   return () => {
     window.removeEventListener("storage", handler);
     window.removeEventListener(RECENT_LINKS_EVENT, handler);
@@ -32,15 +59,12 @@ function subscribe(onStoreChange: () => void) {
 }
 
 function notifySubscribers() {
+  invalidateCache();
   window.dispatchEvent(new Event(RECENT_LINKS_EVENT));
 }
 
 export function useRecentLinks() {
-  const links = useSyncExternalStore(
-    subscribe,
-    readStoredLinks,
-    () => [],
-  );
+  const links = useSyncExternalStore(subscribe, readStoredLinks, () => EMPTY_LINKS);
 
   const isHydrated = useSyncExternalStore(
     () => () => {},
