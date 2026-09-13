@@ -6,7 +6,7 @@ const steps = [
     icon: Link2,
     title: "Drop your long URL",
     description:
-      "Paste any http or https link — blog posts, portfolios, product pages, anything.",
+      "Paste any http or https link: blog posts, portfolios, product pages, anything.",
   },
   {
     number: "02",
@@ -55,7 +55,7 @@ export function HowItWorks() {
               {index < steps.length - 1 && (
                 <div
                   aria-hidden="true"
-                  className="absolute -right-3 top-1/2 hidden h-px w-6 bg-border md:block"
+                  className="absolute -right-3 top-1/2 hidden h-px w-6 bg-border/60 md:block"
                 />
               )}
               <div className="mb-5 flex items-center justify-between">

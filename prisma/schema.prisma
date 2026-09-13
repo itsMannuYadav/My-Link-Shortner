@@ -11,6 +11,7 @@ model Link {
   id          String   @id @default(cuid())
   shortCode   String   @unique
   originalUrl String
+  clicks      Int      @default(0)
   createdAt   DateTime @default(now())
 
   @@index([createdAt])

@@ -150,6 +150,13 @@ export async function getLinkByShortCode(
   });
 }
 
+export async function incrementClicks(shortCode: string): Promise<void> {
+  await prisma.link.update({
+    where: { shortCode },
+    data: { clicks: { increment: 1 } },
+  });
+}
+
 export async function getRecentLinks(limit = 10): Promise<LinkRecord[]> {
   return prisma.link.findMany({
     orderBy: { createdAt: "desc" },

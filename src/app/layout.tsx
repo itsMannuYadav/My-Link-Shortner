@@ -27,7 +27,7 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(appConfig.url),
   title: {
-    default: `${appConfig.fullName} — Shorten URLs Instantly`,
+    default: `${appConfig.fullName} - Shorten URLs Instantly`,
     template: `%s | ${appConfig.name}`,
   },
   description: appConfig.description,
@@ -46,13 +46,13 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: appConfig.url,
     siteName: appConfig.fullName,
-    title: `${appConfig.fullName} — Shorten URLs Instantly`,
+    title: `${appConfig.fullName} - Shorten URLs Instantly`,
     description: appConfig.tagline,
     images: [{ url: "/images/hero-product-mockup.png", width: 1200, height: 630 }],
   },
   twitter: {
     card: "summary_large_image",
-    title: `${appConfig.fullName} — Shorten URLs Instantly`,
+    title: `${appConfig.fullName} - Shorten URLs Instantly`,
     description: appConfig.tagline,
     images: ["/images/hero-product-mockup.png"],
   },

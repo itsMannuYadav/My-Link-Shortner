@@ -1,276 +1,161 @@
-# My Link Shortner
+<div align="center">
 
-**Brand name: My Link**
+# My Link — URL Shortener
 
-> Create short, clean and shareable links instantly.
+**Create short, clean, and shareable links instantly.**
 
-**Live website:** [https://go.mannuyadav.me](https://go.mannuyadav.me)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-go.mannuyadav.me-0070f3?style=flat-square&logo=vercel)](https://go.mannuyadav.me)
+[![Next.js](https://img.shields.io/badge/Next.js-16-black?style=flat-square&logo=next.js)](https://nextjs.org)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6?style=flat-square&logo=typescript)](https://www.typescriptlang.org)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-4-38bdf8?style=flat-square&logo=tailwindcss)](https://tailwindcss.com)
+[![License: MIT](https://img.shields.io/badge/License-MIT-22c55e?style=flat-square)](LICENSE)
 
----
+[**Live Demo →**](https://go.mannuyadav.me) · [Report a Bug](https://github.com/itsMannuYadav/My-Link-Shortner/issues) · [Request a Feature](https://github.com/itsMannuYadav/My-Link-Shortner/issues)
 
-## What is this project?
-
-Imagine you have a very long link like this:
-
-```
-https://example.com/blog/2024/my-super-long-article-title-that-is-hard-to-share
-```
-
-This app turns it into a short link like this:
-
-```
-https://go.mannuyadav.me/aB3xY2
-```
-
-When someone opens the short link, they are automatically sent to the original long website.
-
-Think of it like **Bitly** or **TinyURL**, but this is **your own app** that you built and can host yourself.
-
-### What can this app do?
-
-| Feature | What it means |
-|--------|----------------|
-| Shorten URLs | Paste a long link, get a short one |
-| Custom alias | Choose your own short name (example: `/library`) |
-| QR code | Download a QR image for your link |
-| Copy button | Copy the short link with one click |
-| Recent links | Shows your last 10 links in the browser |
-| Dark mode | Switch between light and dark theme |
-| Fast redirects | Short links open the real website quickly |
+</div>
 
 ---
 
-## What you need before starting
+## What is My Link?
 
-You need these **free tools** on your computer:
+My Link is a self-hostable URL shortener built with Next.js 16 and Turso. Turn any long URL into a clean, shareable short link in seconds — with optional custom aliases, one-click QR codes, and zero sign-up required.
 
-| Tool | Why you need it | Where to get it |
-|------|-----------------|-----------------|
-| **Git** | To download (clone) the project | [https://git-scm.com/downloads](https://git-scm.com/downloads) |
-| **Node.js 20+** | To run the app | [https://nodejs.org](https://nodejs.org) (download the **LTS** version) |
-| **A code editor** (optional but helpful) | To edit files | [https://code.visualstudio.com](https://code.visualstudio.com) |
-
-### Check if Node.js is installed
-
-Open **Terminal** (Mac) or **PowerShell** (Windows) and type:
-
-```bash
-node -v
-npm -v
+```
+https://example.com/blog/2024/my-super-long-article-title → https://go.mannuyadav.me/aB3xY2
 ```
 
-You should see version numbers (example: `v22.x.x` and `10.x.x`).
-
-If you see an error, install Node.js first, then try again.
+Think **Bitly** or **TinyURL**, but open source, self-hosted, and yours to own.
 
 ---
 
-# Part 1 — Run the project on your computer (Local Setup)
+## Features
 
-Follow these steps **in order**. Do not skip steps.
+| Feature | Description |
+|---------|-------------|
+| **Instant shortening** | Paste any URL and get a short link immediately |
+| **Custom aliases** | Choose your own slug — `/library`, `/resume`, `/project` |
+| **QR code generation** | Download a QR image for any link |
+| **One-click copy** | Copy the short URL to clipboard instantly |
+| **Recent links** | Your last 10 links are remembered in the browser |
+| **Dark / light mode** | Full theme support via `next-themes` |
+| **Fast redirects** | Server-side redirect — no client JS required |
+| **Collision-safe codes** | Auto-generated 6-char codes with up to 10 retry attempts |
 
 ---
 
-## Step 1: Download the project (Clone from GitHub)
+## Tech Stack
 
-### 1.1 Create a GitHub account (only if you don't have one)
+| Layer | Technology |
+|-------|------------|
+| Framework | [Next.js 16](https://nextjs.org) (App Router, Turbopack) |
+| Language | TypeScript 5 |
+| UI | [Shadcn UI](https://ui.shadcn.com) + [Tailwind CSS 4](https://tailwindcss.com) |
+| Icons | [Lucide React](https://lucide.dev) |
+| Toasts | [Sonner](https://sonner.emilkowal.ski) |
+| ORM | [Prisma 7](https://www.prisma.io) |
+| DB — local | SQLite via `better-sqlite3` |
+| DB — production | [Turso](https://turso.tech) (libSQL) |
+| Hosting | [Vercel](https://vercel.com) |
 
-1. Go to [https://github.com/signup](https://github.com/signup)
-2. Enter your email, password, and username
-3. Verify your email when GitHub asks you to
+---
 
-### 1.2 Clone the repository
+## Project Structure
 
-Open **PowerShell** (Windows) or **Terminal** (Mac/Linux).
-
-Go to the folder where you keep projects. Example:
-
-```powershell
-cd Desktop
+```
+src/
+├── app/
+│   ├── page.tsx                  # Homepage (shorten form + recent links)
+│   ├── [shortCode]/page.tsx      # Redirect handler
+│   └── api/
+│       ├── shorten/route.ts      # POST — create a short link
+│       └── link/[shortCode]/     # GET — look up a short code
+├── components/
+│   ├── shared/                   # Copy button, shared UI pieces
+│   ├── ui/                       # Shadcn base components
+│   └── providers/                # Theme provider
+├── features/links/
+│   ├── constants.ts              # Reserved routes, alias rules
+│   └── types.ts                  # Shared TypeScript types
+├── hooks/
+│   ├── use-copy-to-clipboard.ts
+│   └── use-recent-links.ts       # localStorage-backed recent links
+├── services/
+│   └── link.service.ts           # Core business logic
+├── lib/
+│   ├── prisma.ts                 # Prisma client (SQLite ↔ Turso)
+│   └── config.ts                 # App-wide config helpers
+└── utils/
+    ├── short-code.ts             # Code generator
+    └── url.ts                    # URL normalizer
+prisma/
+├── schema.prisma
+└── migrations/
+scripts/
+└── push-turso-schema.mjs         # Push schema to Turso (production)
 ```
 
-Now clone (download) the project:
+---
+
+## Getting Started
+
+### Prerequisites
+
+- **Node.js 20+** — [nodejs.org](https://nodejs.org)
+- **Git** — [git-scm.com](https://git-scm.com)
+
+### Local Development
 
 ```bash
 git clone https://github.com/itsMannuYadav/My-Link-Shortner.git
 cd My-Link-Shortner
-```
-
-You should now be inside the project folder.
-
----
-
-## Step 2: Install all packages
-
-Still inside the project folder, run:
-
-```bash
 npm install
 ```
 
-This downloads all libraries the project needs. It may take 1–3 minutes.
+Copy the example env file:
 
-**Wait until it finishes.** You should see something like `added XXX packages` with no red errors.
+```bash
+# macOS / Linux
+cp .env.example .env
 
----
-
-## Step 3: Create your environment file (`.env`)
-
-The app needs a small config file with secret settings.
-
-### On Windows (PowerShell):
-
-```powershell
+# Windows (PowerShell)
 Copy-Item .env.example .env
 ```
 
-### On Mac / Linux:
-
-```bash
-cp .env.example .env
-```
-
-### Open `.env` and make sure it looks like this:
+The default `.env` is all you need locally:
 
 ```env
 DATABASE_URL="file:./dev.db"
 NEXT_PUBLIC_APP_URL="http://localhost:3000"
 ```
 
-**What these mean (simple):**
-
-- `DATABASE_URL` → Where your links are saved on your computer (a local SQLite file)
-- `NEXT_PUBLIC_APP_URL` → The website address used when creating short links locally
-
-> **Important:** For local development, you do **NOT** need Turso variables. Leave `TURSO_DATABASE_URL` and `TURSO_AUTH_TOKEN` commented out (with `#` at the start).
-
----
-
-## Step 4: Create the local database
-
-Run this command once:
+Create the local database and start the dev server:
 
 ```bash
 npm run db:migrate
-```
-
-If it asks for a migration name, you can type `init` and press Enter.
-
-This creates a file called `dev.db` inside the `prisma` folder. That file stores all your shortened links on your computer.
-
----
-
-## Step 5: Start the app
-
-Run:
-
-```bash
 npm run dev
 ```
 
-You should see:
-
-```
-✓ Ready
-- Local: http://localhost:3000
-```
-
-Open your browser and go to:
-
-**[http://localhost:3000](http://localhost:3000)**
-
-### Test it works
-
-1. Paste this URL in the box: `https://google.com`
-2. Click **Shorten Link**
-3. You should see a short link like `http://localhost:3000/abc123`
-4. Click the short link — it should open Google
-
-**Congratulations — the app is running on your computer.**
-
-To stop the server, go back to the terminal and press `Ctrl + C`.
+Open [http://localhost:3000](http://localhost:3000). Paste a URL, click **Shorten Link**, done.
 
 ---
 
-# Part 2 — Put the project online (Production Setup)
+## Deploying to Production
 
-Running locally is great for learning. To share your app with the world, you need:
+This project is designed for **Vercel + Turso**. Vercel hosts the app; Turso provides the cloud SQLite database.
 
-1. **Vercel** → Hosts your website (free)
-2. **Turso** → Stores your links online in a cloud database (free plan available)
-3. **GitHub** → Already used — Vercel reads code from here
+### 1. Create a Turso database
 
-> **Why Turso?** Your computer uses a local file (`dev.db`) to save links. Vercel cannot use that file reliably. Turso is a free online database that works perfectly with Vercel.
+1. Sign up at [turso.tech](https://turso.tech) (free tier available)
+2. Create a database — name it anything, pick a region near your users
+3. Copy the **Database URL** (`libsql://...`) and create an **Auth Token**
 
----
+### 2. Push the schema to Turso
 
-## Step 6: Push your code to GitHub (if you made changes)
-
-If you cloned the repo and didn't change anything, you can skip to Step 7.
-
-If you edited the project and want to deploy your version:
-
-```bash
-git add .
-git commit -m "My changes"
-git push
-```
-
-If `git push` asks for login, sign in with your GitHub account.
-
----
-
-## Step 7: Create a Turso account and database
-
-### 7.1 Sign up on Turso
-
-1. Open [https://turso.tech](https://turso.tech)
-2. Click **Sign Up** or **Get Started**
-3. Sign up using your **GitHub account** (easiest option)
-4. You will land on the Turso dashboard
-
-### 7.2 Create your database
-
-1. Click the **Create Database** button
-2. **Database name:** type `my-link-shortner`
-3. **Location:** pick the region closest to you (example: Mumbai / Asia if available)
-4. Click **Create**
-
-Your database is now created.
-
-### 7.3 Get your Database URL
-
-1. Click on your database name (`my-link-shortner`)
-2. Find the section called **Database URL** or **Connect**
-3. Copy the URL — it looks like this:
-
-```
-libsql://my-link-shortner-yourname.aws-ap-south-1.turso.io
-```
-
-Save this somewhere safe (Notepad is fine for now).
-
-### 7.4 Create an Auth Token
-
-1. In the same database page, find **Tokens** (or **Create Token**)
-2. Click **Create Token**
-3. Give it a name like `vercel-production`
-4. Click **Create**
-5. **Copy the token immediately** — you will only see it once!
-
-It looks like a long string starting with `eyJ...`
-
-Save it next to your Database URL.
-
-### 7.5 Create the tables inside Turso (VERY IMPORTANT)
-
-Adding env vars alone is **not enough**. You must create the database tables once.
-
-On your computer, open the project folder and edit your `.env` file. Add these two lines (use your real values):
+Add your Turso credentials to `.env` temporarily:
 
 ```env
-TURSO_DATABASE_URL="libsql://my-link-shortner-yourname.aws-ap-south-1.turso.io"
-TURSO_AUTH_TOKEN="paste-your-token-here"
+TURSO_DATABASE_URL="libsql://your-db.turso.io"
+TURSO_AUTH_TOKEN="your-token"
 ```
 
 Then run:
@@ -279,184 +164,41 @@ Then run:
 npm run db:push:turso
 ```
 
-You should see:
+### 3. Deploy on Vercel
 
-```
-Turso schema is ready.
-```
+1. Import the repo at [vercel.com/new](https://vercel.com/new)
+2. Add these environment variables before the first deploy:
 
-This creates the `Link` table in Turso where all shortened URLs are stored.
+| Variable | Value |
+|----------|-------|
+| `TURSO_DATABASE_URL` | `libsql://your-db.turso.io` |
+| `TURSO_AUTH_TOKEN` | your token |
+| `NEXT_PUBLIC_APP_URL` | `https://your-domain.com` |
 
-> **After this step**, you can remove the Turso lines from `.env` if you want — they are only needed on Vercel for production. Local dev still uses `DATABASE_URL="file:./dev.db"`.
+3. Click **Deploy** — it's live.
 
----
-
-## Step 8: Deploy on Vercel
-
-### 8.1 Create a Vercel account
-
-1. Go to [https://vercel.com/signup](https://vercel.com/signup)
-2. Click **Continue with GitHub**
-3. Allow Vercel to access your GitHub account
-
-### 8.2 Import your project
-
-1. Go to [https://vercel.com/new](https://vercel.com/new)
-2. Find **My-Link-Shortner** in the list (or your fork)
-3. Click **Import**
-4. Keep all default settings:
-   - **Framework Preset:** Next.js
-   - **Build Command:** `npm run build`
-   - **Output Directory:** (leave default)
-5. **Do NOT click Deploy yet** — add environment variables first (next step)
-
-### 8.3 Add environment variables on Vercel
-
-Before deploying, click **Environment Variables** and add these **3 variables**:
-
-| Name | Value | Example |
-|------|-------|---------|
-| `TURSO_DATABASE_URL` | Your Turso Database URL | `libsql://my-link-shortner-....turso.io` |
-| `TURSO_AUTH_TOKEN` | Your Turso token | `eyJhbG...` (long string) |
-| `NEXT_PUBLIC_APP_URL` | Your public website URL | `https://go.mannuyadav.me` |
-
-For each variable:
-
-1. Type the **Name**
-2. Paste the **Value**
-3. Select **Production** and **Preview** (both checked)
-4. Click **Save**
-
-Then click **Deploy**.
-
-Wait 1–2 minutes until status shows **Ready** (green).
-
-### 8.4 Test your live website
-
-Open your Vercel URL (something like `https://my-link-shortner.vercel.app`).
-
-1. Paste a URL like `https://google.com`
-2. Click **Shorten Link**
-3. It should give you a working short link
-
-If shortening fails with an error, go to the **Troubleshooting** section below.
+> **Custom domain?** Go to Vercel → Settings → Domains, add your domain, update the DNS, then update `NEXT_PUBLIC_APP_URL` and redeploy.
 
 ---
 
-## Step 9: Add your custom domain (Optional)
+## API Reference
 
-If you own a domain (example: `go.mannuyadav.me`):
+### `POST /api/shorten`
 
-1. In Vercel, open your project
-2. Go to **Settings → Domains**
-3. Type your domain and click **Add**
-4. Vercel will show DNS records to add at your domain provider
-5. Add those DNS records (usually a `CNAME` record)
-6. Wait 5–30 minutes for DNS to update
-7. Update `NEXT_PUBLIC_APP_URL` on Vercel to `https://your-domain.com`
-8. Redeploy the project
+Create a short link.
 
----
-
-# How to use the website
-
-1. Open the homepage
-2. Paste a long URL (must start with `http://` or `https://`)
-3. Click **Shorten Link**
-4. Copy the short link, download the QR code, or share it anywhere
-5. Optional: click **Add custom alias** to choose your own short name (example: `library`)
-
-### Custom alias rules
-
-- Minimum 3 characters
-- Only letters, numbers, `-` and `_`
-- Must be unique (not already used)
-- Cannot use reserved names like `api`, `admin`, `login`
-
----
-
-# Project folder structure (simple explanation)
-
-```
-My-Link-Shortner/
-├── src/
-│   ├── app/              → Website pages and API routes
-│   │   ├── page.tsx      → Homepage
-│   │   ├── [shortCode]/  → Redirects short links
-│   │   └── api/          → Backend APIs
-│   ├── components/       → UI parts (buttons, cards, navbar)
-│   ├── hooks/            → Reusable React logic
-│   ├── services/         → Main business logic (creating links)
-│   └── lib/              → Database connection and config
-├── prisma/
-│   ├── schema.prisma     → Database table design
-│   └── migrations/       → Database change history
-├── scripts/
-│   └── push-turso-schema.mjs  → Creates tables in Turso
-├── .env.example          → Example config file (safe to share)
-├── .env                  → Your real config (NEVER upload to GitHub)
-└── package.json          → Project info and commands
-```
-
----
-
-# All commands (cheat sheet)
-
-| Command | When to use it |
-|---------|----------------|
-| `npm install` | First time setup, or after pulling new changes |
-| `npm run dev` | Run the app locally at localhost:3000 |
-| `npm run build` | Test if production build works |
-| `npm run start` | Run production build locally |
-| `npm run lint` | Check code for errors |
-| `npm run db:migrate` | Set up local database (first time on your PC) |
-| `npm run db:push:turso` | Create tables in Turso (first time for production) |
-| `npm run db:studio` | Open a visual database browser |
-
----
-
-# Environment variables explained
-
-| Variable | Required where | What it does |
-|----------|----------------|--------------|
-| `DATABASE_URL` | Local only | Path to local SQLite file (`file:./dev.db`) |
-| `TURSO_DATABASE_URL` | Vercel / Turso setup | Cloud database address |
-| `TURSO_AUTH_TOKEN` | Vercel / Turso setup | Password for Turso database |
-| `NEXT_PUBLIC_APP_URL` | Everywhere | Base URL shown in short links |
-
-**Local example:**
-
-```env
-DATABASE_URL="file:./dev.db"
-NEXT_PUBLIC_APP_URL="http://localhost:3000"
-```
-
-**Production (set on Vercel, not in GitHub):**
-
-```env
-TURSO_DATABASE_URL="libsql://your-db.turso.io"
-TURSO_AUTH_TOKEN="your-token"
-NEXT_PUBLIC_APP_URL="https://go.mannuyadav.me"
-```
-
-> **Never commit `.env` to GitHub.** It may contain secrets. The `.gitignore` file already blocks it.
-
----
-
-# API reference (for developers)
-
-### Create a short link
-
-**POST** `/api/shorten`
+**Request body:**
 
 ```json
 {
   "url": "https://example.com",
-  "alias": "optional-custom-name"
+  "alias": "my-alias"
 }
 ```
 
-**Success response:**
+`alias` is optional. When omitted, a random 6-character code is generated.
+
+**Response `201`:**
 
 ```json
 {
@@ -467,100 +209,98 @@ NEXT_PUBLIC_APP_URL="https://go.mannuyadav.me"
 }
 ```
 
-### Get link details
+**Error codes:**
 
-**GET** `/api/link/[shortCode]`
+| Code | Status | Meaning |
+|------|--------|---------|
+| `INVALID_URL` | 400 | Missing or malformed URL |
+| `INVALID_ALIAS` | 400 | Alias too short, too long, or invalid characters |
+| `RESERVED_ALIAS` | 400 | Alias conflicts with a system route |
+| `DUPLICATE_ALIAS` | 409 | Alias already taken |
+| `CODE_GENERATION_FAILED` | 500 | Collision limit hit — try again |
 
-Returns the original URL and metadata for a short code.
-
----
-
-# Troubleshooting (common problems)
-
-### "This page couldn't load" on the live website
-
-1. Hard refresh: **Ctrl + Shift + R** (Windows) or **Cmd + Shift + R** (Mac)
-2. Make sure the latest code is deployed on Vercel (check **Deployments** tab)
-3. Try in an Incognito / Private browser window
-
-### Shorten button works locally but fails online (500 error)
-
-1. Check Turso env vars are set on Vercel (`TURSO_DATABASE_URL` + `TURSO_AUTH_TOKEN`)
-2. Run `npm run db:push:turso` on your computer (creates the tables)
-3. Redeploy on Vercel: **Deployments → ... → Redeploy**
-
-### `npm install` fails
-
-- Make sure Node.js 20+ is installed (`node -v`)
-- Delete `node_modules` folder and run `npm install` again
-
-### `npm run db:migrate` fails locally
-
-- Make sure `.env` exists and has `DATABASE_URL="file:./dev.db"`
-- Run `npm install` first
-
-### Port 3000 already in use
-
-Another app is using port 3000. Either close that app, or Next.js will automatically try port 3001 — check the terminal output for the correct URL.
-
-### Turso token lost
-
-Create a new token in Turso dashboard → **Tokens → Create Token**, then update it on Vercel and redeploy.
-
-### Short link shows "Link not found"
-
-The link was never saved, or you're using the wrong short code. Create a new link and try again.
+**Alias rules:**
+- 3–32 characters
+- Letters, numbers, `-`, `_` only
+- Cannot be a reserved route (`api`, `admin`, `login`, `docs`, etc.)
 
 ---
 
-# Tech stack
+### `GET /api/link/[shortCode]`
 
-| Part | Technology |
-|------|------------|
-| Frontend + Backend | Next.js 16 |
-| Language | TypeScript |
-| Styling | Tailwind CSS |
-| UI components | Shadcn UI |
-| Database (local) | SQLite |
-| Database (production) | Turso |
-| Hosting | Vercel |
+Look up metadata for a short code.
 
----
+**Response `200`:**
 
-# Future features (not built yet, but ready to add)
-
-The code is organized so you can easily add later:
-
-- User accounts and login
-- Click analytics
-- Team workspaces
-- Custom domains per user
-- Link expiry dates
-- Password-protected links
-
----
-
-# License
-
-MIT — free to use, learn from, and modify.
-
----
-
-## Quick start summary
-
-**Local (5 steps):**
-
-```bash
-git clone https://github.com/itsMannuYadav/My-Link-Shortner.git
-cd My-Link-Shortner
-npm install
-cp .env.example .env        # Windows: Copy-Item .env.example .env
-npm run db:migrate
-npm run dev
+```json
+{
+  "shortCode": "aB3xY2",
+  "originalUrl": "https://example.com",
+  "createdAt": "2026-06-20T06:00:00.000Z"
+}
 ```
 
-Open **http://localhost:3000** — done.
+Returns `404` if the code doesn't exist.
 
-**Online:** Turso database → `npm run db:push:turso` → Vercel deploy with 3 env vars → test live URL.
+---
 
-If you get stuck, read the **Troubleshooting** section above — most issues are covered there.
+## Commands
+
+| Command | What it does |
+|---------|--------------|
+| `npm run dev` | Start dev server at localhost:3000 |
+| `npm run build` | Production build (runs `prisma generate` first) |
+| `npm run start` | Start production build locally |
+| `npm run lint` | Run ESLint |
+| `npm run db:migrate` | Create / apply local SQLite migrations |
+| `npm run db:push:turso` | Push schema to Turso (production setup) |
+| `npm run db:studio` | Open Prisma Studio (visual DB browser) |
+
+---
+
+## Environment Variables
+
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `DATABASE_URL` | Local only | Path to local SQLite file (`file:./dev.db`) |
+| `TURSO_DATABASE_URL` | Production | Turso database URL (`libsql://...`) |
+| `TURSO_AUTH_TOKEN` | Production | Turso auth token |
+| `NEXT_PUBLIC_APP_URL` | Always | Base URL used when generating short links |
+
+> **Never commit `.env` to GitHub.** It is listed in `.gitignore`. Use Vercel's environment variable UI for production secrets.
+
+---
+
+## Roadmap
+
+The architecture is ready for these additions when needed:
+
+- [ ] User accounts and authentication
+- [ ] Click analytics and link stats
+- [ ] Link expiry dates
+- [ ] Password-protected links
+- [ ] Team workspaces
+- [ ] Custom domains per user
+- [ ] Bulk link import / export
+
+---
+
+## Contributing
+
+Pull requests are welcome. For significant changes, open an issue first to discuss what you'd like to change.
+
+1. Fork the repo and create a branch: `git checkout -b feature/my-feature`
+2. Make your changes and run `npm run lint`
+3. Open a pull request
+
+---
+
+## License
+
+[MIT](LICENSE) — free to use, learn from, and modify.
+
+---
+
+<div align="center">
+Built by <a href="https://mannuyadav.me">Mannu Yadav</a>
+</div>

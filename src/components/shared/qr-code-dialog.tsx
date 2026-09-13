@@ -16,12 +16,14 @@ import {
 
 interface QrCodeDialogProps {
   url: string;
+  shortCode?: string;
   label?: string;
   triggerClassName?: string;
 }
 
 export function QrCodeDialog({
   url,
+  shortCode,
   label = "View QR code",
   triggerClassName,
 }: QrCodeDialogProps) {
@@ -58,9 +60,9 @@ export function QrCodeDialog({
 
     const anchor = document.createElement("a");
     anchor.href = dataUrl;
-    anchor.download = "my-link-qr.png";
+    anchor.download = shortCode ? `${shortCode}-qr.png` : "my-link-qr.png";
     anchor.click();
-  }, [dataUrl]);
+  }, [dataUrl, shortCode]);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>

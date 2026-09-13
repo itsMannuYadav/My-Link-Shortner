@@ -1,6 +1,7 @@
 "use client";
 
-import { Clock, Link2, Trash2 } from "lucide-react";
+import Link from "next/link";
+import { BarChart2, Clock, Link2, Trash2, X } from "lucide-react";
 
 import { CopyButton } from "@/components/shared/copy-button";
 import { QrCodeDialog } from "@/components/shared/qr-code-dialog";
@@ -12,6 +13,7 @@ interface RecentLinksProps {
   links: RecentLink[];
   isHydrated: boolean;
   onClear: () => void;
+  onRemove: (shortCode: string) => void;
 }
 
 function formatRelativeTime(isoDate: string): string {
@@ -34,7 +36,7 @@ function formatRelativeTime(isoDate: string): string {
   });
 }
 
-export function RecentLinks({ links, isHydrated, onClear }: RecentLinksProps) {
+export function RecentLinks({ links, isHydrated, onClear, onRemove }: RecentLinksProps) {
   if (!isHydrated || links.length === 0) {
     return null;
   }
@@ -50,18 +52,19 @@ export function RecentLinks({ links, isHydrated, onClear }: RecentLinksProps) {
             Recent links
           </h2>
           <p className="text-sm text-muted-foreground">
-            Saved in this browser · last 10
+            Saved in this browser · last {links.length}
           </p>
         </div>
         <Button
           type="button"
           variant="ghost"
           size="sm"
-          className="rounded-lg text-muted-foreground"
+          className="rounded-lg text-muted-foreground hover:text-destructive"
           onClick={onClear}
+          aria-label="Clear all recent links"
         >
           <Trash2 className="size-3.5" />
-          Clear
+          Clear all
         </Button>
       </div>
 
@@ -69,7 +72,7 @@ export function RecentLinks({ links, isHydrated, onClear }: RecentLinksProps) {
         {links.map((link) => (
           <article
             key={link.shortCode}
-            className="flex items-start justify-between gap-3 p-4 transition-colors hover:bg-muted/30"
+            className="group flex items-start justify-between gap-3 p-4 transition-colors hover:bg-muted/30"
           >
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-2">
@@ -95,8 +98,26 @@ export function RecentLinks({ links, isHydrated, onClear }: RecentLinksProps) {
               <CopyButton value={link.shortUrl} size="icon" />
               <QrCodeDialog
                 url={link.shortUrl}
+                shortCode={link.shortCode}
                 triggerClassName="rounded-lg border-border/70"
               />
+              <Link
+                href={`/stats/${link.shortCode}`}
+                className="flex size-8 items-center justify-center rounded-lg border border-border/70 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+                aria-label={`View stats for ${link.shortUrl}`}
+              >
+                <BarChart2 className="size-3.5" />
+              </Link>
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                className="size-8 rounded-lg text-muted-foreground opacity-0 transition-opacity hover:text-destructive group-hover:opacity-100"
+                onClick={() => onRemove(link.shortCode)}
+                aria-label={`Remove ${link.shortUrl}`}
+              >
+                <X className="size-3.5" />
+              </Button>
             </div>
           </article>
         ))}

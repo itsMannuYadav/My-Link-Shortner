@@ -2,7 +2,7 @@ const DEFAULT_APP_URL = "http://localhost:3000";
 
 export const appConfig = {
   name: "My Link",
-  fullName: "My Link Shortner",
+  fullName: "My Link Shortener",
   tagline: "Create short, clean and shareable links instantly.",
   description:
     "Shorten long URLs instantly with My Link. Create clean, shareable links with custom aliases, QR codes, and lightning-fast redirects.",

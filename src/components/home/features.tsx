@@ -6,7 +6,7 @@ const features = [
   {
     title: "Instant redirects",
     description:
-      "Server-side HTTP redirects. No interstitial pages, no countdown timers — just go.",
+      "Server-side HTTP redirects. No interstitial pages, no countdown timers. Just go.",
     icon: Zap,
     className: "md:col-span-2 md:row-span-1",
     highlight: true,

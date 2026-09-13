@@ -14,6 +14,7 @@ export interface LinkRecord {
   id: string;
   shortCode: string;
   originalUrl: string;
+  clicks: number;
   createdAt: Date;
 }
 

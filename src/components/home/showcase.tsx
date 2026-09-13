@@ -57,9 +57,8 @@ export function Showcase() {
             Links that look intentional, not accidental.
           </h2>
           <p className="mt-4 text-muted-foreground leading-relaxed">
-            Whether you&apos;re sending a deck to a client, dropping a link in
-            your Instagram bio, or printing a QR on a flyer — My Link keeps it
-            clean.
+            Client decks, Instagram bios, flyer QR codes - My Link keeps every
+            one of them clean.
           </p>
 
           <ul className="mt-8 space-y-4">

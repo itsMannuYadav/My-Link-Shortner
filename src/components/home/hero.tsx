@@ -55,8 +55,8 @@ export function Hero() {
             </h1>
 
             <p className="mt-6 max-w-md text-lg leading-relaxed text-white/60">
-              Paste a long URL. Get a clean short link, QR code, and custom alias
-              — ready to share in seconds. No signup. No clutter.
+              Paste a long URL. Get a clean short link, QR code, and custom
+              alias, ready to share in seconds. No signup. No clutter.
             </p>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">

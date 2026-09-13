@@ -2,6 +2,7 @@ import { notFound, redirect } from "next/navigation";
 
 import {
   getLinkByShortCode,
+  incrementClicks,
   isReservedRoute,
 } from "@/services/link.service";
 
@@ -21,6 +22,9 @@ export default async function RedirectPage({ params }: PageProps) {
   if (!link) {
     notFound();
   }
+
+  // Fire-and-forget — don't block the redirect on the DB write
+  incrementClicks(shortCode).catch(() => {});
 
   redirect(link.originalUrl);
 }

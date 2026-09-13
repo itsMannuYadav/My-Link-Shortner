@@ -63,6 +63,15 @@ function notifySubscribers() {
   window.dispatchEvent(new Event(RECENT_LINKS_EVENT));
 }
 
+function writeLinks(links: RecentLink[]) {
+  try {
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(links));
+    notifySubscribers();
+  } catch {
+    // Storage may be unavailable in private mode
+  }
+}
+
 export function useRecentLinks() {
   const links = useSyncExternalStore(subscribe, readStoredLinks, () => EMPTY_LINKS);
 
@@ -76,13 +85,13 @@ export function useRecentLinks() {
     const current = readStoredLinks();
     const filtered = current.filter((item) => item.shortCode !== link.shortCode);
     const next = [link, ...filtered].slice(0, appConfig.recentLinksLimit);
+    writeLinks(next);
+  }, []);
 
-    try {
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
-      notifySubscribers();
-    } catch {
-      // Storage may be unavailable in private mode
-    }
+  const removeLink = useCallback((shortCode: string) => {
+    const current = readStoredLinks();
+    const next = current.filter((item) => item.shortCode !== shortCode);
+    writeLinks(next);
   }, []);
 
   const clearLinks = useCallback(() => {
@@ -94,5 +103,5 @@ export function useRecentLinks() {
     }
   }, []);
 
-  return { links, addLink, clearLinks, isHydrated };
+  return { links, addLink, removeLink, clearLinks, isHydrated };
 }
