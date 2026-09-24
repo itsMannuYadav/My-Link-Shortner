@@ -19,11 +19,23 @@ async function main() {
       "id" TEXT NOT NULL PRIMARY KEY,
       "shortCode" TEXT NOT NULL,
       "originalUrl" TEXT NOT NULL,
+      "clicks" INTEGER NOT NULL DEFAULT 0,
       "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
     )`,
     `CREATE UNIQUE INDEX IF NOT EXISTS "Link_shortCode_key" ON "Link"("shortCode")`,
     `CREATE INDEX IF NOT EXISTS "Link_createdAt_idx" ON "Link"("createdAt")`,
   ]);
+
+  // Add columns introduced after the table was first created
+  const { rows } = await client.execute(`PRAGMA table_info("Link")`);
+  const columns = new Set(rows.map((row) => row.name));
+
+  if (!columns.has("clicks")) {
+    await client.execute(
+      `ALTER TABLE "Link" ADD COLUMN "clicks" INTEGER NOT NULL DEFAULT 0`,
+    );
+    console.log(`Added "clicks" column to "Link".`);
+  }
 
   console.log("Turso schema is ready.");
 }
